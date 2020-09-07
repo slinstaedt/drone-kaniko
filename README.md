@@ -9,18 +9,18 @@ Additionaly if the `$cache_dir` is mounted as volume, Kaniko's `warmer` is used 
 - Uses your [drone workspace](https://docs.drone.io/pipeline/docker/syntax/workspace/) as local [build context](https://github.com/GoogleContainerTools/kaniko#kaniko-build-contexts)
 - Uses a file named `Dockerfile` at the root of your build context as Dockerfile
 - Creates additional image labels according to [label schema](http://label-schema.org/rc1/):
-	- org.label-schema.schema-version=1.0
-	- org.label-schema.build-date=`$(date -I'seconds')`
-	- org.label-schema.name=[DRONE_REPO](https://docs.drone.io/pipeline/environment/reference/drone-repo/)
-	- org.label-schema.url=[DRONE_REPO_LINK](https://docs.drone.io/pipeline/environment/reference/drone-repo-link/)
-	- org.label-schema.vcs-url=[DRONE_REMOTE_URL](https://docs.drone.io/pipeline/environment/reference/drone-remote-url/)
-	- org.label-schema.vcs-ref=[DRONE_COMMIT_SHA](https://docs.drone.io/pipeline/environment/reference/drone-commit-sha/)
-	- org.label-schema.version=[DRONE_TAG](https://docs.drone.io/pipeline/environment/reference/drone-tag/)/[DRONE_COMMIT_SHA](https://docs.drone.io/pipeline/environment/reference/drone-commit-sha/)
+    - org.label-schema.schema-version=1.0
+    - org.label-schema.build-date=`$(date -I'seconds')`
+    - org.label-schema.name=[DRONE_REPO](https://docs.drone.io/pipeline/environment/reference/drone-repo/)
+    - org.label-schema.url=[DRONE_REPO_LINK](https://docs.drone.io/pipeline/environment/reference/drone-repo-link/)
+    - org.label-schema.vcs-url=[DRONE_REMOTE_URL](https://docs.drone.io/pipeline/environment/reference/drone-remote-url/)
+    - org.label-schema.vcs-ref=[DRONE_COMMIT_SHA](https://docs.drone.io/pipeline/environment/reference/drone-commit-sha/)
+    - org.label-schema.version=[DRONE_TAG](https://docs.drone.io/pipeline/environment/reference/drone-tag/)/[DRONE_COMMIT_SHA](https://docs.drone.io/pipeline/environment/reference/drone-commit-sha/)
 - Creates multiple image tags:
-	- [DRONE_BRANCH](https://docs.drone.io/pipeline/environment/reference/drone-branch/) with slashes replaced by dashes
-	- [DRONE_COMMIT_SHA](https://docs.drone.io/pipeline/environment/reference/drone-commit-sha/) with the hash being shortened to 8 letters
-	- `latest`, if [DRONE_BRANCH](https://docs.drone.io/pipeline/environment/reference/drone-branch/)=[DRONE_REPO_BRANCH](https://docs.drone.io/pipeline/environment/reference/drone-repo-branch/)
-	- `x, x.y, x.y.z`, if [DRONE_SEMVER](https://docs.drone.io/pipeline/environment/reference/drone-semver/) is given for tag events
+    - [DRONE_BRANCH](https://docs.drone.io/pipeline/environment/reference/drone-branch/) with slashes replaced by dashes
+    - [DRONE_COMMIT_SHA](https://docs.drone.io/pipeline/environment/reference/drone-commit-sha/) with the hash being shortened to 8 letters
+    - `latest`, if [DRONE_BRANCH](https://docs.drone.io/pipeline/environment/reference/drone-branch/)=[DRONE_REPO_BRANCH](https://docs.drone.io/pipeline/environment/reference/drone-repo-branch/)
+    - `x, x.y, x.y.z`, if [DRONE_SEMVER](https://docs.drone.io/pipeline/environment/reference/drone-semver/) is given for tag events
 
 ## Plugin settings
 - `registry`: Use this registry for image publishing and layer caching (defaults to index.docker.io)
@@ -54,10 +54,10 @@ steps:
     image: dronee/kaniko
     settings:
       registry: registry.company.com
-	  username:
-	  	from_secret: repository_username
-	  password:
-	  	from_secret: repository_password
+      username:
+        from_secret: repository_username
+      password:
+        from_secret: repository_password
 ```
 
 ## Complex usage
@@ -71,8 +71,8 @@ steps:
     image: dronee/kaniko
     settings:
       registry: registry.company.com
-	  cache_dir: /my-cache
-	  cache_repo: caches/my-repo
+      cache_dir: /my-cache
+      cache_repo: caches/my-repo
       repo: my-repo
       extra_opts: --insecure --insecure-pull
     volumes:
@@ -82,5 +82,5 @@ steps:
 volumes:
   - name: cache
     host: 
-	  path: /tmp/kaniko
+      path: /tmp/kaniko
 ```
