@@ -85,12 +85,13 @@ IMAGE_TAGS=$(cat $tags | while read tag; do echo "--destination=$REGISTRY/$REPO:
 
 if [ -d "$CACHE_DIR" ]; then
 	echo "Prewarm image caches at $CACHE_DIR"
-	echo "warmer --verbosity=$VERBOSITY --cache-dir=$CACHE_DIR ${PLUGIN_CACHE_TTL+--cache-ttl=$PLUGIN_CACHE_TTL} $CACHE_IMAGES"
+	set -x
 	warmer \
 		--verbosity=$VERBOSITY \
 		--cache-dir=$CACHE_DIR \
 		${PLUGIN_CACHE_TTL+--cache-ttl=$PLUGIN_CACHE_TTL} \
 		$CACHE_IMAGES || true
+	{ set +x; } 2> /dev/null
 fi
 
 set -x
@@ -109,3 +110,7 @@ executor \
 	${PLUGIN_REGISTRY_MIRROR+--registry-mirror=$PLUGIN_REGISTRY_MIRROR} \
 	${PLUGIN_TARGET+--target=$PLUGIN_TARGET} \
 	${PLUGIN_EXTRA_OPTS:-}
+{ set +x; } 2> /dev/null
+
+echo "Image $REGISTRY/$REPO published with tags:"
+cat $tags
