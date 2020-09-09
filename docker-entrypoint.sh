@@ -1,9 +1,9 @@
 #!/busybox/sh
 set -euo pipefail
 
-args=kaniko.args
-labels=kaniko.labels
-tags=kaniko.tags
+args=$(mktemp)
+labels=$(mktemp)
+tags=$(mktemp)
 
 REGISTRY=${PLUGIN_REGISTRY:-index.docker.io}
 REPO=${PLUGIN_REPO:-$(echo $DRONE_REPO | tr '[:upper:]' '[:lower:]')}
@@ -30,8 +30,7 @@ if [ "${PLUGIN_JSON_KEY:-}" ];then
 	export GOOGLE_APPLICATION_CREDENTIALS=/kaniko/gcr.json
 fi
 
-if [ ! -f $args ]; then
-	touch $args
+if ! cat .kaniko.args 1> $args 2> /dev/null; then
 	if [ -n "${PLUGIN_BUILD_ARGS:-}" ]; then
 		echo "$PLUGIN_BUILD_ARGS" | tr ',' '\n' >> $args
 	fi
@@ -40,8 +39,7 @@ if [ ! -f $args ]; then
 	fi
 fi
 
-if [ ! -f $labels ]; then
-	touch $labels
+if ! cat .kaniko.labels 1> $labels 2> /dev/null; then
 	echo "org.label-schema.schema-version=1.0" >> $labels
 	echo "org.label-schema.build-date=$(date -I'seconds')" >> $labels
 	echo "org.label-schema.name=$REPO" >> $labels
@@ -54,8 +52,7 @@ if [ ! -f $labels ]; then
 	fi
 fi
 
-if [ ! -f $tags ]; then
-	touch $tags
+if ! cat .kaniko.tags 1> $tags 2> /dev/null; then
 	if [ "${DRONE_BRANCH:-}" = "${DRONE_REPO_BRANCH:-}" ]; then
 		echo "latest" >> $tags
 	fi
