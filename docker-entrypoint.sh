@@ -10,7 +10,6 @@ REPO=${PLUGIN_REPO:-$(echo $DRONE_REPO | tr '[:upper:]' '[:lower:]')}
 VERBOSITY=${PLUGIN_VERBOSITY:-info}
 CONTEXT=${PLUGIN_CONTEXT:-$PWD}
 DOCKERFILE=${PLUGIN_DOCKERFILE:-Dockerfile}
-CACHE_DIR=${PLUGIN_CACHE_DIR:-/cache}
 
 if [ -n "${PLUGIN_USERNAME:-}" ] && [ -n "${PLUGIN_PASSWORD:-}" ]; then
 	DOCKER_AUTH=$(echo -n "$PLUGIN_USERNAME:$PLUGIN_PASSWORD" | base64 | tr -d "\n")
@@ -82,9 +81,10 @@ fi
 BUILD_ARGS=$(cat $args | while read arg; do echo "--build-arg $arg "; done)
 IMAGE_LABELS=$(cat $labels | while read label; do echo "--label $label "; done)
 IMAGE_TAGS=$(cat $tags | while read tag; do echo "--destination=$REGISTRY/$REPO:$tag "; done)
-RESULT=$(cat $tags)
+RESULT_TAGS=$(cat $tags | while read tag; do echo "- $REGISTRY/$REPO:$tag"; done)
 
-if [ -d "$CACHE_DIR" ]; then
+CACHE_DIR="${PLUGIN_CACHE_DIR:-/cache}/kaniko"
+if [ -d "${PLUGIN_CACHE_DIR:-/cache}" ]; then
 	echo "Prewarm image caches at $CACHE_DIR"
 	set -x
 	warmer \
@@ -105,7 +105,6 @@ executor \
 	$IMAGE_LABELS \
 	--cache=${PLUGIN_CACHE:-true} \
 	--cache-dir=$CACHE_DIR \
-	${PLUGIN_CACHE_DIR+--cache-dir=$PLUGIN_CACHE_DIR} \
 	${PLUGIN_CACHE_REPO+--cache-repo=$REGISTRY/$PLUGIN_CACHE_REPO} \
 	${PLUGIN_CACHE_TTL+--cache-ttl=$PLUGIN_CACHE_TTL} \
 	${PLUGIN_REGISTRY_MIRROR+--registry-mirror=$PLUGIN_REGISTRY_MIRROR} \
@@ -113,5 +112,5 @@ executor \
 	${PLUGIN_EXTRA_OPTS:-}
 { set +x; } 2> /dev/null
 
-echo "Image '$REGISTRY/$REPO' published with tags:"
-echo $RESULT
+echo "Images published:"
+echo $RESULT_TAGS
