@@ -82,7 +82,7 @@ fi
 BUILD_ARGS=$(cat $args | while read arg; do echo "--build-arg $arg "; done)
 IMAGE_LABELS=$(cat $labels | while read label; do echo "--label $label "; done)
 IMAGE_TAGS=$(cat $tags | while read tag; do echo "--destination=$REGISTRY/$REPO:$tag "; done)
-RESULT=$(cat $tags | while read tag; do echo "$tag\n"; done)
+RESULT=$(cat $tags)
 
 if [ -d "$CACHE_DIR" ]; then
 	echo "Prewarm image caches at $CACHE_DIR"
@@ -114,5 +114,4 @@ executor \
 { set +x; } 2> /dev/null
 
 echo "Image '$REGISTRY/$REPO' published with tags:"
-printf $RESULT
-echo
+echo $RESULT
