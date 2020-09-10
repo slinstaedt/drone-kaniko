@@ -114,4 +114,4 @@ executor \
 { set +x; } 2> /dev/null
 
 echo "Image published with tags:"
-echo $RESULT
+printf $RESULT
