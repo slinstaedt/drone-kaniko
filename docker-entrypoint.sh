@@ -81,7 +81,6 @@ fi
 BUILD_ARGS=$(cat $args | while read arg; do echo "--build-arg $arg "; done)
 IMAGE_LABELS=$(cat $labels | while read label; do echo "--label $label "; done)
 IMAGE_TAGS=$(cat $tags | while read tag; do echo "--destination=$REGISTRY/$REPO:$tag "; done)
-RESULT_TAGS=$(cat $tags | while read tag; do echo "- $REGISTRY/$REPO:$tag"; done)
 
 CACHE_DIR="${PLUGIN_CACHE_DIR:-/cache}/kaniko"
 if [ -d "${PLUGIN_CACHE_DIR:-/cache}" ]; then
@@ -113,5 +112,4 @@ executor \
 	${PLUGIN_EXTRA_OPTS:-}
 { set +x; } 2> /dev/null
 
-echo "Images published:"
-echo $RESULT_TAGS
+echo "Done."
