@@ -103,6 +103,7 @@ executor \
 	$BUILD_ARGS \
 	$IMAGE_TAGS \
 	$IMAGE_LABELS \
+	--no-push=${PLUGIN_NO_PUSH:-false} \
 	--cache=${PLUGIN_CACHE:-true} \
 	--cache-dir=$CACHE_DIR \
 	${PLUGIN_CACHE_REPO+--cache-repo=$REGISTRY/$PLUGIN_CACHE_REPO} \
