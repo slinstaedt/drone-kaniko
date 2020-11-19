@@ -56,7 +56,7 @@ if ! cat .kaniko.tags 1> $tags 2> /dev/null; then
 		echo "latest" >> $tags
 	fi
 	if [ -n "${DRONE_BRANCH:-}" ]; then
-		echo "${DRONE_BRANCH/\//-}" >> $tags
+		echo "${DRONE_BRANCH/\//-}" | tr -d 'äöüÄÖÜß' >> $tags
 	fi
 	if [ -n "${DRONE_COMMIT_SHA:-}" ]; then
 		echo "${DRONE_COMMIT_SHA:0:${PLUGIN_COMMIT_SHA_LENGTH:-8}}" >> $tags
