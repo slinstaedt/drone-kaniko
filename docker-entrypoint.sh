@@ -13,7 +13,7 @@ DOCKERFILE=${PLUGIN_DOCKERFILE:-Dockerfile}
 
 if [ -n "${PLUGIN_USERNAME:-}" ] && [ -n "${PLUGIN_PASSWORD:-}" ]; then
 	DOCKER_AUTH=$(echo -n "$PLUGIN_USERNAME:$PLUGIN_PASSWORD" | base64 | tr -d "\n")
-	if [ -n "$PLUGIN_REGISTRY_MIRROR:-}" ] && [ -n "${PLUGIN_REGISTRY:-}" ]; then
+	if [ -n "${PLUGIN_REGISTRY_MIRROR:-}" ] && [ -n "${PLUGIN_REGISTRY:-}" ]; then
 		cat > /kaniko/.docker/config.json <<EOF
 {
 	"auths": {
